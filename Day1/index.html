@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JS Drum Kit</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="icon" href="https://fav.farm/✅" />
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="https://fav.farm/✅">
 </head>
-
 <body>
+    <!-- Drum keys -->
     <div class="keys">
         <div data-key="65" class="key">
             <kbd>A</kbd>
@@ -49,6 +48,7 @@
         </div>
     </div>
 
+    <!-- Drum sounds -->
     <audio data-key="65" src="sounds/clap.wav"></audio>
     <audio data-key="83" src="sounds/hihat.wav"></audio>
     <audio data-key="68" src="sounds/kick.wav"></audio>
@@ -60,26 +60,44 @@
     <audio data-key="76" src="sounds/tink.wav"></audio>
 
     <script>
+        // Get all drum keys
+        const keys = document.querySelectorAll('.key');
+
+        // Play sound from keyboard
         function playSound(e) {
-            const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`)
-            const key = document.querySelector(`.key[data-key="${e.keyCode}"]`)
-            if (!audio) return; //stops the function from running all together
-            audio.currentTime = 0; //rewind to start
-            audio.play()
-            key.classList.add('playing')
+            const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+            const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+            if (!audio) return;
+            audio.currentTime = 0;
+            audio.play();
+            key.classList.add('playing');
         }
+
+        // Play sound from mouse or phone
+        function playSoundByClick(e) {
+            const key = e.currentTarget;
+            const keyCode = key.dataset.key;
+            const audio = document.querySelector(`audio[data-key="${keyCode}"]`);
+            if (!audio) return;
+            audio.currentTime = 0;
+            audio.play();
+            key.classList.add('playing');
+        }
+
+        // Remove animation after it finishes
         function removeTransition(e) {
-            if (e.propertyName !== 'transform') return //skip it if it's not a transform
-            this.classList.remove('playing')
+            if (e.propertyName !== 'transform') return;
+            this.classList.remove('playing');
         }
 
-        const keys = document.querySelectorAll('.key')
-        keys.forEach(key => key.addEventListener('transitionend', removeTransition))
-        //when transiton ends it removes it to make it not coming always.
+        // Listen for keyboard presses
+        window.addEventListener('keydown', playSound);
 
-        window.addEventListener('keydown', playSound) //the main thing make the window listen
-
+        // Listen for mouse clicks and phone touches
+        keys.forEach(key => {
+            key.addEventListener('pointerdown', playSoundByClick);
+            key.addEventListener('transitionend', removeTransition);
+        });
     </script>
 </body>
-
 </html>
