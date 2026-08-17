@@ -16,7 +16,13 @@
         <input type="range" id="spacing" name="spacing" min="10" max="200" value="10" data-sizing="px">
 
         <label for="blur">Blur:</label>
-        <input type="range" id="blur" name="blur" min="0" max="25" value="10" data-sizing="px">
+        <input type="range" id="blur" name="blur" min="0" max="25" value="0" data-sizing="px">
+
+        <label for="x">Move in X:</label>
+        <input type="range" id="x" name="x" min="0" max="500" value="0" data-sizing="px">
+
+        <label for="y">Move in Y:</label>
+        <input type="range" id="y" name="y" min="0" max="500" value="0" data-sizing="px">
 
         <label for="base">Base Color</label>
         <input type="color" id="base" name="base" value="#ffc600">
@@ -29,13 +35,18 @@
     :root {
         --base: #ffc600;
         --spacing: 10px;
-        --blur: 10px
+        --blur: 0px;
+        --x: 0px;
+        --y: 0px;
+
     }
 
     img {
         padding: var(--spacing);
         background: var(--base);
         filter: blur(var(--blur));
+        transform: translate(var(--x, 0px), var(--y, 0px));
+
     }
 
     .h1 {
@@ -71,7 +82,8 @@
         const suffix = this.dataset.sizing || '';
         document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix)
     }
-    
+
+
     input.forEach(input => input.addEventListener('change', handleUpdate));
     input.forEach(input => input.addEventListener('mousemove', handleUpdate));
 
